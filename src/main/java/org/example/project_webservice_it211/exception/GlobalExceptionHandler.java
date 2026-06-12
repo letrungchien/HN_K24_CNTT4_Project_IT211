@@ -13,6 +13,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // ---- Validation (400) ----
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(
@@ -27,12 +28,25 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.fail("Dữ liệu không hợp lệ", errors));
     }
 
+    // ---- Not Found (404) ----
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleNotFound(NotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ApiResponse.fail(404, ex.getMessage()));
     }
+
+    // ---- FR-09: Cloud Storage lỗi → 503 Service Unavailable ----
+
+    @ExceptionHandler(CloudStorageException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCloudStorage(CloudStorageException ex) {
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(ApiResponse.fail(503, ex.getMessage()));
+    }
+
+    // ---- Generic Runtime (400) ----
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse<Void>> handleRuntime(RuntimeException ex) {

@@ -3,7 +3,9 @@ package org.example.project_webservice_it211.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.project_webservice_it211.dto.ChangePasswordRequest;
+import org.example.project_webservice_it211.dto.ForgotPasswordRequest;
 import org.example.project_webservice_it211.dto.LoginRequest;
+import org.example.project_webservice_it211.dto.ResetPasswordRequest;
 import org.example.project_webservice_it211.dto.UserDTO;
 import org.example.project_webservice_it211.dto.response.ApiResponse;
 import org.example.project_webservice_it211.dto.response.JWTResponse;
@@ -67,5 +69,34 @@ public class AuthController {
     ) {
         authService.changePassword(authentication.getName(), request);
         return ResponseEntity.ok(ApiResponse.ok("Đổi mật khẩu thành công"));
+    }
+
+    // =====================================================
+    // FR-10: Quên mật khẩu — các endpoint PUBLIC (không cần JWT)
+    // =====================================================
+
+    /**
+     * Bước 1: Người dùng nhập email → hệ thống gửi link reset.
+     * Luôn trả 200 dù email có tồn tại hay không (tránh lộ thông tin).
+     */
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<Void>> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request
+    ) {
+        authService.forgotPassword(request);
+        return ResponseEntity.ok(ApiResponse.ok(
+                "Nếu email tồn tại trong hệ thống, bạn sẽ nhận được hướng dẫn đặt lại mật khẩu"
+        ));
+    }
+
+    /**
+     * Bước 2: Người dùng gửi token + mật khẩu mới.
+     */
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<Void>> resetPassword(
+            @Valid @RequestBody ResetPasswordRequest request
+    ) {
+        authService.resetPassword(request);
+        return ResponseEntity.ok(ApiResponse.ok("Đặt lại mật khẩu thành công. Vui lòng đăng nhập lại"));
     }
 }
