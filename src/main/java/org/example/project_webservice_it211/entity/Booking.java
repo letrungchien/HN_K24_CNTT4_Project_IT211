@@ -27,7 +27,6 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "court_id")
     private Court court;
