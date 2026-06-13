@@ -7,9 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-/**
- * Gửi email thông báo, bao gồm email đặt lại mật khẩu (FR-10).
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor

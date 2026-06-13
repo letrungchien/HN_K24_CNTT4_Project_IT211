@@ -1,4 +1,4 @@
-package org.example.project_webservice_it211.config;
+package org.example.project_webservice_it211.security.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

@@ -15,12 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Xử lý upload và quản lý hình ảnh sân cầu.
- * Ảnh được lưu trên Cloudinary (Cloud Storage) — không lưu local disk.
- * Kiến trúc Stateless: server không giữ file, chỉ lưu URL vào DB.
- */
-@Service
+
 @RequiredArgsConstructor
 public class CourtImageService {
 
@@ -28,7 +23,6 @@ public class CourtImageService {
     private final CourtImageRepository courtImageRepository;
     private final ManagerService managerService;
 
-    /** FR-09: Inject CloudinaryService thay vì lưu local disk */
     private final CloudinaryService cloudinaryService;
 
     // ---------- Upload ----------
@@ -69,7 +63,7 @@ public class CourtImageService {
         return results;
     }
 
-    // ---------- Reorder ----------
+
 
     @Transactional
     public List<CourtImageResponse> reorderImages(Long courtId, List<Long> orderedImageIds, String username) {
@@ -101,7 +95,7 @@ public class CourtImageService {
                 .toList();
     }
 
-    // ---------- Helpers ----------
+
 
     private Court getCourtOwnedByManager(Long courtId, String username) {
         Court court = courtRepository.findById(courtId)

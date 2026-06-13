@@ -71,14 +71,7 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.ok("Đổi mật khẩu thành công"));
     }
 
-    // =====================================================
-    // FR-10: Quên mật khẩu — các endpoint PUBLIC (không cần JWT)
-    // =====================================================
 
-    /**
-     * Bước 1: Người dùng nhập email → hệ thống gửi link reset.
-     * Luôn trả 200 dù email có tồn tại hay không (tránh lộ thông tin).
-     */
     @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<Void>> forgotPassword(
             @Valid @RequestBody ForgotPasswordRequest request
@@ -89,9 +82,7 @@ public class AuthController {
         ));
     }
 
-    /**
-     * Bước 2: Người dùng gửi token + mật khẩu mới.
-     */
+
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<Void>> resetPassword(
             @Valid @RequestBody ResetPasswordRequest request
