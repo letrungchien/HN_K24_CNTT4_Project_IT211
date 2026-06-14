@@ -3,9 +3,7 @@ package org.example.project_webservice_it211.dto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-/**
- * DTO dành riêng cho Admin tạo tài khoản — cho phép chỉ định role.
- */
+
 @Data
 public class CreateUserRequest {
 

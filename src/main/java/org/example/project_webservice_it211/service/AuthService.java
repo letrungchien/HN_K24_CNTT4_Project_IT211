@@ -32,7 +32,7 @@ public class    AuthService {
     private final PasswordResetTokenRepository resetTokenRepo;
     private final EmailService emailService;
 
-    /** Thời hạn token đặt lại mật khẩu: 15 phút */
+
     private static final int RESET_TOKEN_EXPIRY_MINUTES = 15;
 
 
@@ -130,14 +130,7 @@ public class    AuthService {
         userRepository.save(user);
     }
 
-    // =====================================================
-    // FR-10: Quên mật khẩu
-    // =====================================================
 
-    /**
-     * Bước 1: Người dùng nhập email → tạo token → gửi email.
-     * Luôn trả thành công để tránh lộ thông tin tài khoản (security best practice).
-     */
     @Transactional
     public void forgotPassword(ForgotPasswordRequest request) {
         userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
@@ -156,15 +149,12 @@ public class    AuthService {
 
             resetTokenRepo.save(resetToken);
 
-            // Gửi email chứa link reset
+
             emailService.sendResetPasswordEmail(user.getEmail(), tokenValue, user.getFullName());
         });
     }
 
-    /**
-     * Bước 2: Người dùng gửi token + mật khẩu mới → đặt lại mật khẩu.
-     * Token chỉ dùng được 1 lần và phải còn trong hạn.
-     */
+
     @Transactional
     public void resetPassword(ResetPasswordRequest request) {
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
@@ -174,22 +164,22 @@ public class    AuthService {
         PasswordResetToken resetToken = resetTokenRepo.findByToken(request.getToken())
                 .orElseThrow(() -> new RuntimeException("Token không hợp lệ hoặc không tồn tại"));
 
-        // Kiểm tra đã dùng chưa
+
         if (resetToken.getUsedAt() != null) {
             throw new RuntimeException("Token đã được sử dụng trước đó");
         }
 
-        // Kiểm tra hết hạn
+
         if (LocalDateTime.now().isAfter(resetToken.getExpiresAt())) {
             throw new RuntimeException("Token đã hết hạn. Vui lòng yêu cầu đặt lại mật khẩu mới");
         }
 
-        // Đặt lại mật khẩu
+
         User user = resetToken.getUser();
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
 
-        // Đánh dấu token đã dùng (chỉ dùng 1 lần)
+
         resetToken.setUsedAt(LocalDateTime.now());
         resetTokenRepo.save(resetToken);
     }
