@@ -65,17 +65,6 @@ public class ManagerService {
     }
 
 
-    private BadmintonCluster getClusterOwnedBy(Long clusterId, String username) {
-        BadmintonCluster cluster = clusterRepository.findById(clusterId)
-                .orElseThrow(() -> new NotFoundException("Cluster không tồn tại"));
-
-        if (cluster.getManager() == null ||
-                !cluster.getManager().getUsername().equals(username)) {
-            throw new RuntimeException("Bạn không có quyền quản lý cluster này");
-        }
-        return cluster;
-    }
-
     private Court getCourtOwnedBy(Long courtId, String username) {
         Court court = courtRepository.findById(courtId)
                 .orElseThrow(() -> new NotFoundException("Sân không tồn tại"));
