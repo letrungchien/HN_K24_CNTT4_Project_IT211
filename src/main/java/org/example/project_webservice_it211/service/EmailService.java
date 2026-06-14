@@ -21,13 +21,7 @@ public class EmailService {
     @Value("${app.reset-password.base-url:http://localhost:8080}")
     private String baseUrl;
 
-    /**
-     * Gửi email chứa link đặt lại mật khẩu.
-     *
-     * @param toEmail   địa chỉ email người nhận
-     * @param token     reset token (UUID)
-     * @param fullName  tên hiển thị của người dùng
-     */
+    
     public void sendResetPasswordEmail(String toEmail, String token, String fullName) {
         String resetLink = baseUrl + "/api/v1/auth/reset-password?token=" + token;
 
